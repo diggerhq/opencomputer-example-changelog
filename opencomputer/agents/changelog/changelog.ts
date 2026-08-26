@@ -18,16 +18,16 @@ export function repositoryName(value: unknown): string {
 }
 
 export function configuredRepository(
-  value = process.env.OPENCOMPUTER_REPOSITORY,
+  value = process.env.CHANGELOG_REPOSITORY,
 ): string {
   if (!value) {
-    throw new Error("OPENCOMPUTER_REPOSITORY is not configured");
+    throw new Error("CHANGELOG_REPOSITORY is not configured");
   }
   return repositoryName(value);
 }
 
 export function changelogPath(
-  value = process.env.OPENCOMPUTER_CHANGELOG_PATH ?? "CHANGELOG.md",
+  value = process.env.CHANGELOG_PATH ?? "CHANGELOG.md",
 ): string {
   const path = nonEmptyString(value, "changelog path").replace(/^\/+/, "");
   const segments = path.split("/");

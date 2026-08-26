@@ -40,20 +40,21 @@ npx opencomputer login
 npx opencomputer link
 ```
 
-Create the initial Development deployment. OpenComputer currently requires an
-active agent deployment before it accepts that agent's runtime variables or
-managed secrets:
+Start the Development watcher and keep it running. Its first sync creates the
+active agent deployment required before OpenComputer accepts that agent's
+runtime variables or managed secrets. Unlike one-shot `opencomputer deploy`,
+the watcher reuses the project saved by `opencomputer link`:
 
 ```bash
-npm run deploy -- --alias development
+npm run dev
 ```
 
-Configure the only repository the tools can access. This is ordinary runtime
-configuration, not a credential:
+In another terminal, configure the only repository the tools can access. This
+is ordinary runtime configuration, not a credential:
 
 ```bash
 printf '%s\n' 'your-org/your-repository' | \
-  npx opencomputer env set OPENCOMPUTER_REPOSITORY \
+  npx opencomputer env set CHANGELOG_REPOSITORY \
     --environment development --agent current
 ```
 
@@ -62,7 +63,7 @@ Markdown path, configure it explicitly:
 
 ```bash
 printf '%s\n' 'docs/CHANGELOG.md' | \
-  npx opencomputer env set OPENCOMPUTER_CHANGELOG_PATH \
+  npx opencomputer env set CHANGELOG_PATH \
     --environment development --agent current
 ```
 
@@ -72,12 +73,6 @@ declared `https://api.github.com/repos/` connections:
 ```bash
 npx opencomputer secrets set GITHUB_TOKEN \
   --environment development --agent current
-```
-
-Start the development watcher:
-
-```bash
-npm run dev
 ```
 
 Development schedules do not recur automatically. In the OpenComputer
@@ -111,7 +106,7 @@ deploy explicitly:
 
 ```bash
 printf '%s\n' 'your-org/your-repository' | \
-  npx opencomputer env set OPENCOMPUTER_REPOSITORY \
+  npx opencomputer env set CHANGELOG_REPOSITORY \
     --environment production --agent current
 
 npx opencomputer secrets set GITHUB_TOKEN \
