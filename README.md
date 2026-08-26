@@ -122,7 +122,7 @@ npm run deploy -- --alias production
 
 Production begins recurring runs at the next schedule occurrence. The schedule
 is code-owned in
-`opencomputer/agents/changelog/schedules/daily.ts`; edit and redeploy it to
+`opencomputer/agents/changelog/schedules/daily-changelog.ts`; edit and redeploy it to
 change cadence, timezone, or lookback.
 
 ## Security model
