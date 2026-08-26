@@ -5,7 +5,6 @@
   "type": "module",
   "scripts": {
     "deploy": "opencomputer deploy",
-    "dev": "opencomputer deploy --watch",
     "session": "opencomputer session",
     "test": "node --import tsx --test opencomputer/agents/changelog/*.test.ts",
     "typecheck": "tsc --noEmit"

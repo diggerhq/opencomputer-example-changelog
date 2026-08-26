@@ -46,7 +46,7 @@ runtime variables or managed secrets. Unlike one-shot `opencomputer deploy`,
 the watcher reuses the project saved by `opencomputer link`:
 
 ```bash
-npm run dev
+npm run deploy -- --watch
 ```
 
 In another terminal, configure the only repository the tools can access. This
