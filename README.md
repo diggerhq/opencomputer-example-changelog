@@ -40,6 +40,14 @@ npx opencomputer login
 npx opencomputer link
 ```
 
+Create the initial Development deployment. OpenComputer currently requires an
+active agent deployment before it accepts that agent's runtime variables or
+managed secrets:
+
+```bash
+npm run deploy -- --alias development
+```
+
 Configure the only repository the tools can access. This is ordinary runtime
 configuration, not a credential:
 
