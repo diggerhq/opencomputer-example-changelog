@@ -76,6 +76,14 @@ type PullRequest = {
 
 type GitRef = { ref: string; object: { sha: string; type: string } };
 
+type GitCompare = {
+  status: string;
+  ahead_by: number;
+  behind_by: number;
+  total_commits: number;
+  files?: Array<{ filename: string; status: string }>;
+};
+
 type ContentFile = {
   type: "file";
   path: string;
@@ -372,9 +380,21 @@ export const publishChangelogPullRequest = defineTool({
           path,
           branch,
         );
+        const comparison = await json<GitCompare>(
+          githubWrite,
+          `/repos/${target.encoded}/compare/${expectedBaseSha}...${encodeURIComponent(branch)}`,
+          { signal },
+        );
+        const changedFiles = comparison.files ?? [];
         branchContainsEntry =
           branchFile.content?.includes(changelogMarker(expectedBaseSha)) === true &&
-          branchFile.content === next.content;
+          comparison.status === "ahead" &&
+          comparison.ahead_by === 1 &&
+          comparison.behind_by === 0 &&
+          comparison.total_commits === 1 &&
+          changedFiles.length === 1 &&
+          changedFiles[0].filename === path &&
+          ["added", "modified"].includes(changedFiles[0].status);
         if (!branchContainsEntry) {
           throw new Error(
             `Deterministic branch ${branch} is occupied by unexpected content; review it manually`,
@@ -416,8 +436,14 @@ export const publishChangelogPullRequest = defineTool({
           base: repository.default_branch,
         }),
       },
-      [422],
+      [403, 422],
     );
+    if (createPull.status === 403) {
+      const detail = (await createPull.text()).slice(0, 2_000);
+      throw new Error(
+        `GitHub API 403 while creating the pull request. Branch ${branch} already contains the changelog-only commit and is safe to retry after granting Pull requests: write. ${detail}`,
+      );
+    }
     if (createPull.status === 422) {
       const existing = await json<PullRequest[]>(
         githubWrite,
