@@ -1,0 +1,6 @@
+node_modules/
+opencomputer/.env.local
+.opencomputer/
+dist/
+*.log
+.DS_Store
