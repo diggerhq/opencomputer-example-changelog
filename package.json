@@ -10,7 +10,7 @@
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {
-    "@opencomputer/agent": "^0.5.2"
+    "@opencomputer/agent": "^0.9.1"
   },
   "devDependencies": {
     "@opencomputer/cli": "^0.6.1",
